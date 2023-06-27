@@ -1,3 +1,5 @@
+#2배 확대
+
 import os
 from tkinter import *
 import math
@@ -49,6 +51,16 @@ def mul2btn():
             tempImage[i][k] = image[int(i/2)][int(k/2)]
 
     displayImage(tempImage,newH,newW)
+def div2btn():
+    global image
+    newH = int(height/2)
+    newW = int(width/2)
+    tempImage = imageto2array(newH,newW)
+    for i in range(newH) :
+        for k in range(newW) :
+            tempImage[i][k] = image[i*2][k*2]
+
+    displayImage(tempImage,newH,newW)
 
 #변수
 window, canvas, paper = None, None, None
@@ -63,6 +75,10 @@ window.title('영상처리 Alpha')
 
 mul2btn = Button(window,text='2배 확대',command=mul2btn)
 mul2btn.pack()
+
+div2btn = Button(window,text='2배 축소',command=div2btn)
+div2btn.pack()
+
 #파일 불러오기
 filename = 'newjeans.RAW'
 # 파일 크기 알아내기
