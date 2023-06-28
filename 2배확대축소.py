@@ -21,7 +21,7 @@ def displayImage(image,height, width):
     for i in range(height) :
         for k in range(width) :
             r = g = b = image[i][k]
-            paper.put('#%02x%02x%02x' % (r, g, b), (k, i))
+            paper.put('#%02x%02x%02x' % (r, g, b), (k, i)) # 02x : 16진수 2자리로 표현
     canvas.pack()
 def imageto2array(h,y):
     image2 = []
@@ -51,6 +51,8 @@ def mul2btn():
             tempImage[i][k] = image[int(i/2)][int(k/2)]
 
     displayImage(tempImage,newH,newW)
+
+
 def div2btn():
     global image
     newH = int(height/2)
