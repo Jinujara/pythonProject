@@ -118,11 +118,10 @@ def grayImage():
     # 메모리 할당
     outImage = [[[0 for _ in range(outW)] for _ in range(outH)] for _ in range(3)]
     # ** 찐 영상처리 알고리즘 ** ##
-    for rgb in range(2):
-        for i in range(inH):
-            for k in range(inW):
-                hap = inImage[0][i][k] + inImage[1][i][k] + inImage[2][i][k]
-                outImage[0][i][k] = outImage[1][i][k] = outImage[2][i][k] = hap//3
+    for i in range(inH):
+        for k in range(inW):
+            hap = inImage[0][i][k] + inImage[1][i][k] + inImage[2][i][k]
+            outImage[0][i][k] = outImage[1][i][k] = outImage[2][i][k] = hap//3
         ##################################
     displayImage()
 
@@ -163,45 +162,56 @@ def addImage():
 def AvgImage():
     global window, canvas, paper, filename, inImage,outImage,inH,inW,outH,outW
     outH, outW = inH, inW
+    hap = 0
+    grayscaleimage = [[[0 for _ in range(outW)] for _ in range(outH)] for _ in range(3)]
+    for i in range(inH):
+        for k in range(inW):
+            hap = inImage[0][i][k] + inImage[1][i][k] + inImage[2][i][k]
+            grayscaleimage[0][i][k] = grayscaleimage[1][i][k] = grayscaleimage[2][i][k] = hap//3
+    hap = 0
+    for i in range(inH):
+        for k in range(inW):
+            hap +=grayscaleimage[0][i][k]
+            #rgb의 픽셀값은 동일하기 때문.
+    avg = hap//(inH*inW) # 1231323124125
     for rgb in range(3):
-        hap = 0
         for i in range(inH):
             for k in range(inW):
-                hap +=inImage[rgb][i][k]
-        avg = hap/(inH*inW)
-        for i in range(inH):
-            for k in range(inW):
-                if (inImage[rgb][i][k] > avg):
+                if (grayscaleimage[rgb][i][k] > avg):
                     outImage[rgb][i][k] = 255
                 else:
                     outImage[rgb][i][k] = 0
+    print(hap)
     ##################################
     displayImage()
 
 def StaticImage():
     global window, canvas, paper, filename, inImage,outImage,inH,inW,outH,outW
     outH, outW = inH, inW
+
+    grayscaleimage = [[[0 for _ in range(outW)] for _ in range(outH)] for _ in range(3)]
+    for i in range(inH):
+        for k in range(inW):
+            hap = inImage[0][i][k] + inImage[1][i][k] + inImage[2][i][k]
+            grayscaleimage[0][i][k] = grayscaleimage[1][i][k] = grayscaleimage[2][i][k] = hap // 3
+
     for rgb in range(3):
         for i in range(inH):
             for k in range(inW):
-                if (inImage[rgb][i][k] > 127):
+                if (grayscaleimage[rgb][i][k] > 127):
                     outImage[rgb][i][k] = 255
                 else:
                     outImage[rgb][i][k] = 0
     ##################################
     displayImage()
 
-def imageto1array():
+def imageto1array(grayScaleImage):
     global inImage,inH,inW
-    temparray = []
     array = []
-    for rgb in range(3):
-        for i in range(inH):
-            for k in range(inW):
-                array.append(inImage[rgb][i][k])
-        temparray.append(array)
-        array = []
-    return temparray # array는 [r,g,b]가 됨. ex) [[255,255,255,255,...],[255,255,255,255,...],[255,255,255,255,...]]
+    for i in range(inH):
+        for k in range(inW):
+            array.append(grayScaleImage[i][k])
+    return array # array는 [r,g,b]가 됨. ex) [[255,255,255,255,...],[255,255,255,255,...],[255,255,255,255,...]]
 
 #흑백3-2 : 퀵정렬
 def quick_sort(arr):
@@ -215,40 +225,34 @@ def quick_sort(arr):
     return quick_sort(left) + equal + quick_sort(right)
 
 #흑백3-3 : 중앙값 반환
-def findmedian():
+def findmedian(grayScaleImage):
     global inImage,inH,inW
-    image3 = []
-    image2 = imageto1array()
-    print(image2)
-    image3.append(quick_sort(image2[0])) # r
-    image3.append(quick_sort(image2[1])) # g
-    image3.append(quick_sort(image2[2])) # b
-    rlength = len(image3[0])
-    glength = len(image3[1])
-    blength = len(image3[2])
-    mid = []
-    midnum = 0
-    for rgb in range(3):
-        length = len(image3[rgb])
-        if length % 2 == 1:
-            median = image3[length // 2]
-        else:
-            mid1 = image3[rgb][length // 2]
-            mid2 = image3[rgb][length // 2 - 1]
-            midnum = (mid1 + mid2) / 2
-        mid.append(midnum)
-    return mid
+    image2 = imageto1array(grayScaleImage[0])
+    image3 =quick_sort(image2) # r
+    length = len(image3)
+    if length % 2 == 1:
+        midnum = image3[length // 2]
+    else:
+        mid1 = image3[length // 2]
+        mid2 = image3[(length // 2) - 1]
+        midnum = (mid1 + mid2) / 2
+    return int(midnum)
 
 def mediumImage():
     global window, canvas, paper, filename, inImage, outImage, inH, inW, outH, outW
     outH, outW = inH, inW
     # 메모리 할당
+    grayScaleImage = [[[0 for _ in range(outW)] for _ in range(outH)] for _ in range(3)]
+    for i in range(inH):
+        for k in range(inW):
+            hap = inImage[0][i][k] + inImage[1][i][k] + inImage[2][i][k]
+            grayScaleImage[0][i][k] = grayScaleImage[1][i][k] = grayScaleImage[2][i][k] = hap // 3
     outImage = [[[0 for _ in range(outW)] for _ in range(outH)] for _ in range(3)]
-    median = findmedian()
+    midnum = findmedian(grayScaleImage)
     for rgb in range(3):
         for i in range(inH):
             for k in range(inW):
-                if (inImage[rgb][i][k] > median[rgb]):
+                if (grayScaleImage[rgb][i][k] > midnum):
                     outImage[rgb][i][k] = 255
                 else:
                     outImage[rgb][i][k] = 0

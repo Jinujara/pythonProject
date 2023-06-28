@@ -148,6 +148,7 @@ def StaticImage():
 def imageto1array(image):
     global window, canvas, paper, filename, inImage,outImage,inH,inW,outH,outW
     outH, outW = inH, inW
+    #메모리 할당
     image1 = [ 0 for _ in range(outH*outW)]
     for i in range(inH):
         for k in range(inW):
