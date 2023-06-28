@@ -30,10 +30,6 @@ def displayImage() :
     canvas = Canvas(window, height=outH, width=outW)
     paper = PhotoImage(height=outH, width=outW)
     canvas.create_image((outW / 2, outH / 2), image=paper, state='normal')
-    # for i in range(outH) :
-    #     for k in range(outW) :
-    #         r = g = b = outImage[i][k]
-    #         paper.put('#%02x%02x%02x' % (r, g, b), (k, i))
 
     rgbString = ""
     for i in range(outH):
@@ -97,13 +93,6 @@ def saveImage():
         image.save(saveFp, format="JPEG")
         saveFp.close()
     messagebox.showinfo('성공', saveFp.name + '으로 저장')
-    # import struct
-    # for i in range(outH):
-    #     for k in range(outW):
-    #         saveFp.write(struct.pack('BBB',outImage[0][i][k],outImage[1][i][k],outImage[2][i][k]))
-    # saveFp.close()
-    #
-    # messagebox.showinfo('성공', saveFp.name + '으로 저장')
 
 def func_exit():
     exit()
@@ -319,9 +308,9 @@ def zoomOutImage():
     # 메모리 할당
     outImage = [[[0 for _ in range(outW)] for _ in range(outH)] for _ in range(3)]
     for rgb in range(3):
-        for i in range(inH):
-            for k in range(inW):
-                    outImage[rgb][i//scale][k//scale] = inImage[rgb][i][k]
+        for i in range(outH):
+            for k in range(outW):
+                    outImage[rgb][i][k] = inImage[rgb][i*scale][k*scale]
     ##################################
     displayImage()
 def zoomInImage():
